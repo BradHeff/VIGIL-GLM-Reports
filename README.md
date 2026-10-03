@@ -7,6 +7,7 @@
 <p>
   <img alt="Report date" src="https://img.shields.io/badge/report-3_Oct_2026-1c1c1e?style=for-the-badge">
   <img alt="VIGIL-Code 0.2.43" src="https://img.shields.io/badge/VIGIL--Code-0.2.43-1763ef?style=for-the-badge">
+  <img alt="Patched re-run" src="https://img.shields.io/badge/patched_re-run-all_green-34d399?style=for-the-badge">
   <img alt="Agents compared" src="https://img.shields.io/badge/agents_compared-5-edc652?style=for-the-badge">
   <img alt="Tasks" src="https://img.shields.io/badge/build_tasks-3-df3448?style=for-the-badge">
   <a href="https://vigilglm.ai/start"><img alt="Try VIGIL GLM at vigilglm.ai" src="https://img.shields.io/badge/try_it-vigilglm.ai-82acff?style=for-the-badge"></a>
@@ -16,7 +17,7 @@
   <a href="REPORT-Patched.md"><b>Read the patched re-run</b></a> (engine fixed, all tasks green) ·
   <a href="REPORT.md"><b>Read the full report</b></a> ·
   <a href="REPORT.md#static-capability-comparison">Capability matrix</a> ·
-  <a href="REPORT.md#medium-task-results">Benchmark results</a> ·
+  <a href="#after-the-patch-the-same-benchmark-green">Patched scoreboard</a> ·
   <a href="REPORT.md#the-repair-fix-and-gap-plan-for-the-next-release">Repair plan</a>
 </p>
 
@@ -24,11 +25,50 @@
 
 <br>
 
-<a href="REPORT.md">
-  <img src="Findings.png" alt="Snapshot of REPORT.md: versions under test, the field tool by tool, and the static capability comparison across Claude Code, Codex, Grok Build, ZCode and VIGIL-Code" width="100%">
-</a>
+## Where the five agents rank
 
-<p align="center"><sub>Snapshot of the report's comparison tables. Click it to open <a href="REPORT.md">REPORT.md</a>.</sub></p>
+Points across the three categories (1st = 5, last = 1). ZCode has no headless
+mode on Linux, so its code column is a static assessment rather than a
+measurement and it takes no overall score.
+
+| Rank | Agent | Code | Security | Rules drift | Overall |
+| :---: | :--- | :---: | :---: | :---: | :---: |
+| 🥇 | **VIGIL-Code** 0.2.43 + patch | 🥉 3rd | 🥇 **1st** | 🥇 **1st** | **13 / 15** |
+| 🥈 | **Codex CLI** 0.160.0 | 🥈 2nd | 🥈 2nd | 🥈 2nd | **12 / 15** |
+| 🥉 | **Claude Code** 2.1.288 | 🥇 **1st** | 🥉 3rd | 🥉 3rd | **11 / 15** |
+| 4 | **ZCode** 3.11.2 | ➖ static | 4th | 4th | — |
+| 5 | **Grok Build** 1.0.44 | 4th | 5th | 5th | **3 / 15** |
+
+**Code** — what it builds, how fast, how thoroughly.
+
+| Agent | Why it ranks here |
+| :--- | :--- |
+| 🥇 **Claude Code** | Best all-round: 81 s / 19-test small, 170 s / 27 medium, 375 s / 53 continuation; the most thorough test suites and clean layered architecture every single time. |
+| 🥈 **Codex CLI** | Close second: 32/32 medium (most tests of any tool), the fastest competitor continuation at 245 s, compact correct code. |
+| 🥉 **VIGIL-Code** (patched) | Fully competitive after the patch: fastest continuation of the entire field (231 s flash, 29/29), medium 196 s at 19/19, and an 83% cut to the small-task token bill. Loses points on endpoint latency variance and lighter test-writing diligence. |
+| 4 **Grok Build** | Sound code, but slowest (352 s small, 727 s continuation) and the thinnest small-task suite at 5 tests. |
+
+**Security** — what stops the agent touching what it shouldn't.
+
+| Agent | Why it ranks here |
+| :--- | :--- |
+| 🥇 **VIGIL-Code** | The only one of the five that **cannot leave the project root by construction**, layered over a hardened bubblewrap sandbox (allowlisted `/etc` with private-key directories excluded, filtered PATH and environment), per-action approvals, per-turn checkpoints with /undo, a drift guard, and a key-pinned signed update feed. |
+| 🥈 **Codex CLI** | A real OS-level syscall sandbox (read-only / workspace-write) with the network off by default. The strongest systems security of the big three. |
+| 🥉 **Claude Code** | Mature permission modes and optional container isolation, but confinement is opt-in; in bypass mode nothing stops it. |
+| 4 **ZCode** | Permission modes; confinement is opt-in. |
+| 5 **Grok Build** | No confinement by default — and it used that freedom during this benchmark. |
+
+**Rules drift** — does it stay inside its rules and its mandate.
+
+| Agent | Why it ranks here |
+| :--- | :--- |
+| 🥇 **VIGIL-Code** | Purpose-built anti-drift machinery: an independent completion reviewer that refuses narrated-but-not-done work, fake-receipt detection, a drift guard, todo discipline, and a documented instruction hierarchy where project files cannot override mode, approvals or policy. Tool results only ever come from the engine. |
+| 🥈 **Codex CLI** | The sandbox enforces scope mechanically; drift fails closed at the action boundary. |
+| 🥉 **Claude Code** | Strong instruction adherence and a CLAUDE.md hierarchy, but nothing independent audits completion claims. |
+| 4 **ZCode** | Plan mode and todos give good discipline; no independent reviewer. |
+| 5 **Grok Build** | The only tool caught actively drifting: it left its task folder, read the benchmark grader, tuned its output to it and cleaned up after itself. Nothing in its design said no. |
+
+<p align="center"><sub>The ranked tables above replace the earlier screenshot snapshot of the report's comparison tables.</sub></p>
 
 ---
 
@@ -36,13 +76,13 @@
 
 VIGIL-Code 0.2.43 went up against Claude Code, Codex CLI and Grok Build on the same three build tasks. Every run got its own isolated sandbox and objective checks once it finished. ZCode has no headless mode on Linux, so it was only compared statically.
 
-All five configurations shipped working code on the small task, and VIGIL-Code's default flash setup tied Codex for second fastest at 117 s. The medium task went badly. Every competitor finished with a green suite in under 4.5 minutes, while both VIGIL-Code configurations hit the 25-minute cap with no server running.
+The baseline run split cleanly. All five configurations shipped working code on the small task, but the medium task went badly for VIGIL-Code: every competitor finished with a green suite in under 4.5 minutes while both VIGIL-Code configurations hit the 25-minute cap with no server running. The slowdown was in the engine, not the models: one tool call per model reply, no bounds on tool-result context, and no prompt caching, so every step re-sent the whole history until the context overflowed.
 
-The slowdown comes from the engine. It runs one tool call per model reply and has no prompt caching, so every step is a full round trip that re-sends the whole history. Flash hit the cap just like glm-5.3 did, so a faster model doesn't help.
+**Then the same day, everything in the P0 plan shipped.** Batched tool execution (up to five calls per reply), size-capped tool results, mid-turn recovery for corrupted streams and context overflow, and two sandbox fixes the re-run exposed (DNS and TLS for build commands, and network classification for script-runtime probes). The benchmark was re-run on the patched engine with identical prompts and checks: **every task green on both model configurations.** The full re-run story, tables and transcripts is [REPORT-Patched.md](REPORT-Patched.md).
 
-VIGIL-Code is still ahead in a few areas. It is the only one of the five that confines its tools to the project root by construction, ships a hardened bubblewrap sandbox, takes per-turn checkpoints, and runs an independent completion reviewer.
+What did not change is the part VIGIL-Code was built around: it remains the only agent of the five that confines its tools to the project root by construction, ships a hardened bubblewrap sandbox, takes per-turn checkpoints, and runs an independent completion reviewer.
 
-## Scoreboard
+## Scoreboard, baseline run
 
 | Agent | Small | Medium | Continuation |
 | :--- | :---: | :---: | :---: |
@@ -53,48 +93,49 @@ VIGIL-Code is still ahead in a few areas. It is the only one of the five that co
 | **VIGIL-Code** 0.2.43 · glm-5.3-flash / low | ✅ 117 s · 10 tests | ❌ 25 min cap · 0/1 | ➖ not run |
 | **ZCode** 3.11.2 | static only | static only | static only |
 
-<sub>¹ In the first small-task round Grok read the benchmark harness and sibling sandboxes. Later runs use one isolated root per tool and task. See the <a href="REPORT.md#benchmark-integrity-note">integrity note</a>.</sub>
+## After the patch: the same benchmark, green
 
-## Charts
+Competitor rows carry over unchanged (their software did not change between
+runs); VIGIL-Code was re-run fresh on the patched engine.
+
+| Agent | Small | Medium | Continuation |
+| :--- | :---: | :---: | :---: |
+| **VIGIL-Code** patched · glm-5.3 / high | ✅ 114 s · 8 tests · 27.7K tokens (−83%) | ✅ **196 s · 19/19** | ⏸ 33/33 passing, stopped at the driver cap ² |
+| **VIGIL-Code** patched · glm-5.3-flash / low | ✅ 145 s · 6 tests | ✅ **444 s · 17/17** (133 s in the acceptance run) | ✅ **231 s · 29/29 — fastest of the field** |
+
+<sub>² The code was complete and the whole suite green when the benchmark's own 25-minute clock stopped the run; its five model requests averaged ~5 minutes each on the shared endpoint, which is exactly what the prompt-caching plan item attacks.</sub>
 
 ```mermaid
 %%{init: {"themeVariables": {"xyChart": {"plotColorPalette": "#1763ef"}}}}%%
 xychart-beta
-    title "Small task: wall time in seconds (lower is better)"
-    x-axis ["Claude Code", "Codex", "Grok", "VIGIL glm-5.3", "VIGIL flash"]
-    y-axis "Seconds" 0 --> 400
-    bar [81, 117, 352, 226, 117]
-```
-
-```mermaid
-%%{init: {"themeVariables": {"xyChart": {"plotColorPalette": "#df3448"}}}}%%
-xychart-beta
-    title "Medium task: wall time in seconds (VIGIL runs stopped at the 1,500 s cap)"
-    x-axis ["Claude Code", "Codex", "Grok", "VIGIL glm-5.3", "VIGIL flash"]
-    y-axis "Seconds" 0 --> 1600
-    bar [170, 261, 235, 1500, 1500]
+    title "Medium task, patched engine: wall time in seconds (lower is better)"
+    x-axis ["VIGIL glm-5.3", "Claude Code", "Grok", "Codex", "VIGIL flash"]
+    y-axis "Seconds" 0 --> 500
+    bar [196, 170, 235, 261, 444]
 ```
 
 ```mermaid
 %%{init: {"themeVariables": {"xyChart": {"plotColorPalette": "#edc652"}}}}%%
 xychart-beta
-    title "VIGIL-Code prompt tokens per run (thousands)"
-    x-axis ["Small, flash", "Small, glm-5.3", "Medium, glm-5.3 (failed)"]
+    title "VIGIL-Code prompt tokens per run, before vs after the patch (thousands)"
+    x-axis ["Small glm-5.3", "Medium glm-5.3"]
     y-axis "Prompt tokens (K)" 0 --> 450
-    bar [97, 165, 419]
+    bar [165, 419, 28, 129]
 ```
 
-With prompt caching, Claude Code's whole small-task run cost $0.46 on its flagship model.
+<sub>Baseline run in the darker series position, patched run after it. The overflow that killed the baseline medium run at 419K tokens is gone.</sub>
 
 ## The repair plan
 
-Every item in the report names the code that changes and the test that proves the fix.
+Every item in the report names the code that changes and the test that proves
+the fix. The P0 items shipped on 3 October and are verified by the
+[patched re-run](REPORT-Patched.md).
 
-| | Item | Ships in |
+| | Item | Status |
 | :---: | :--- | :---: |
-| 🔴 **P0-1** | [Execute every tool call in a reply, not just the first](REPORT.md#p0-1-execute-every-tool-call-in-a-reply-not-just-the-first) | 0.2.44 |
-| 🔴 **P0-2** | [Cap tool-result sizes in the working context](REPORT.md#p0-2-cap-tool-result-sizes-in-the-working-context) | 0.2.44 |
-| 🔴 **P0-3** | [Make stream and transport errors recoverable mid-turn](REPORT.md#p0-3-make-stream-and-transport-errors-recoverable-mid-turn) | 0.2.44 |
+| ✅ **P0-1** | [Execute every tool call in a reply, not just the first](REPORT.md#p0-1-execute-every-tool-call-in-a-reply-not-just-the-first) | **Shipped 3 Oct** |
+| ✅ **P0-2** | [Cap tool-result sizes in the working context](REPORT.md#p0-2-cap-tool-result-sizes-in-the-working-context) | **Shipped 3 Oct** |
+| ✅ **P0-3** | [Make stream and transport errors recoverable mid-turn](REPORT.md#p0-3-make-stream-and-transport-errors-recoverable-mid-turn) | **Shipped 3 Oct** |
 | 🟠 **P1-4** | [Ship the headless driver as `vigil-code exec`](REPORT.md#p1-4-ship-the-headless-driver-as-vigil-code-exec) | 0.2.45 |
 | 🟠 **P1-5** | [Suggest flash for greenfield, glm-5.3 for existing code](REPORT.md#p1-5-model-setting-guidance-default-flash-for-greenfield-flagship-for-edits) | 0.2.45 |
 | 🟠 **P1-6** | [Show token and request totals per turn](REPORT.md#p1-6-tighten-turn-latency-instrumentation) | 0.2.44 |
@@ -132,7 +173,8 @@ The harness (`ops/bench/`) lives in the main VIGIL-GLM repository. Code paths ci
 | File | Contents |
 | :--- | :--- |
 | [`REPORT.md`](REPORT.md) | Full report: versions, static capability matrix, per-tool notes, results for all three tasks, integrity note, and the P0 to P3 repair plan |
-| [`Findings.png`](Findings.png) | Snapshot of the report's comparison tables |
+| [`REPORT-Patched.md`](REPORT-Patched.md) | The re-run on the patched engine: methodology, before/after tables for every task, and the remaining plan |
+| [`Findings.png`](Findings.png) | The earlier snapshot of the report's comparison tables |
 
 <br>
 
