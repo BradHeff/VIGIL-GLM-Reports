@@ -13,6 +13,7 @@
 </p>
 
 <p>
+  <a href="REPORT-Patched.md"><b>Read the patched re-run</b></a> (engine fixed, all tasks green) ·
   <a href="REPORT.md"><b>Read the full report</b></a> ·
   <a href="REPORT.md#static-capability-comparison">Capability matrix</a> ·
   <a href="REPORT.md#medium-task-results">Benchmark results</a> ·
