@@ -203,6 +203,31 @@ The sandboxes are kept at /tmp/vb-<tool>-<task> for inspection.
 
 ## The repair, fix and gap plan for the next release
 
+### Update, 3 October: P0 implemented and re-benchmarked
+
+The same day, the three P0 items landed in code/agent.cjs and
+code/turn-context.cjs with regression tests (tests/vigil-code-p0-fixes.test.ts,
+458 engine tests green, strict typecheck clean), and the medium benchmark was
+re-run on the patched engine:
+
+| Configuration | Before | After |
+| --- | --- | --- |
+| glm-5.3-flash/low, medium task | stopped at the 25 min cap, 0 tests passing, server never ran | 133 s, 14/14 tests, every HTTP probe correct, 13 requests, 90K prompt tokens |
+
+That is faster than Claude Code (170 s), Codex (261 s) and Grok (235 s) on
+the same task. The acceptance run also exposed and fixed two more P0-grade
+sandbox defects: the project sandbox could not resolve DNS (resolv.conf and
+friends were not mounted) or verify TLS on Fedora (the CA bundle symlink
+under /etc/ssl points into /etc/pki, which was not mounted either; only the
+public trust extracts are now bound, private key directories stay out), and
+the network classifier missed script-runtime fetch probes, so compound
+"sleep 90; node -e fetch(...)" commands ran without network and convinced
+the model the environment was offline. Gate ledger:
+.unlazy/vigil-code-p0-20261003/GATES.md, all eight gates met.
+
+The remaining plan items below are unchanged; P3 (prompt caching) is the
+next biggest lever now that batching and bounded results are in.
+
 Priorities: P0 blocks the next release, P1 belongs in it, P2 is the
 following release, P3 is directional. Every item names the code that
 changes and how we will know it is fixed.
