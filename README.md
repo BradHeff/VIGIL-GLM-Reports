@@ -2,7 +2,7 @@
 
 # VIGIL-GLM Reports
 
-**Benchmarks and capability reviews for [VIGIL-Code](https://github.com/BradHeff/VIGIL-GLM), the desktop code agent of the [VIGIL GLM platform](https://vigilglm.ai/start).**
+**Benchmarks and capability reviews for VIGIL-Code, the desktop code agent of the [VIGIL GLM platform](https://vigilglm.ai/start).**
 
 <p>
   <img alt="Report date" src="https://img.shields.io/badge/report-3_Oct_2026-1c1c1e?style=for-the-badge">
@@ -33,12 +33,13 @@
 
 ## The short version
 
-VIGIL-Code 0.2.43 was run against Claude Code, Codex CLI and Grok Build on three identical build tasks, each in its own isolated sandbox, with objective checks after every run. ZCode was compared statically because it has no headless mode on Linux.
+VIGIL-Code 0.2.43 went up against Claude Code, Codex CLI and Grok Build on the same three build tasks. Every run got its own isolated sandbox and objective checks once it finished. ZCode has no headless mode on Linux, so it was only compared statically.
 
-- **Small task:** all five configurations shipped working code. VIGIL-Code's default flash setup tied Codex for second-fastest at 117 s.
-- **Medium task:** every competitor finished with a green suite in under 4.5 minutes. Both VIGIL-Code configurations hit the 25-minute cap without a running server.
-- **Why:** the engine runs one tool call per model reply and has no prompt caching, so every step is a full round-trip that re-sends the whole history. The GLM models aren't the bottleneck; the agent loop is.
-- **Where VIGIL-Code leads:** it is the only one of the five that confines its tools to the project root by construction, ships a hardened bubblewrap sandbox, takes per-turn checkpoints, and runs an independent completion reviewer.
+All five configurations shipped working code on the small task, and VIGIL-Code's default flash setup tied Codex for second fastest at 117 s. The medium task went badly. Every competitor finished with a green suite in under 4.5 minutes, while both VIGIL-Code configurations hit the 25-minute cap with no server running.
+
+The slowdown comes from the engine. It runs one tool call per model reply and has no prompt caching, so every step is a full round trip that re-sends the whole history. Flash hit the cap just like glm-5.3 did, so a faster model doesn't help.
+
+VIGIL-Code is still ahead in a few areas. It is the only one of the five that confines its tools to the project root by construction, ships a hardened bubblewrap sandbox, takes per-turn checkpoints, and runs an independent completion reviewer.
 
 ## Scoreboard
 
@@ -82,7 +83,7 @@ xychart-beta
     bar [97, 165, 419]
 ```
 
-For scale: Claude Code's entire small-task run cost **$0.46** on its flagship model.
+With prompt caching, Claude Code's whole small-task run cost $0.46 on its flagship model.
 
 ## The repair plan
 
@@ -101,7 +102,7 @@ Every item in the report names the code that changes and the test that proves th
 | 🟡 **P2-9** | [Document the confinement advantage](REPORT.md#p2-9-keep-the-confinement-advantage-and-document-it) | 0.3 |
 | ⚪ **P3-10** | [Prompt caching or server-side turn state](REPORT.md#p3-10-prompt-caching-or-server-side-turn-state) | platform |
 
-<sub>🔴 P0 blocks the next release · 🟠 P1 belongs in it · 🟡 P2 is the following release · ⚪ P3 is directional</sub>
+<sub>🔴 P0 blocks the next release · 🟠 P1 belongs in it · 🟡 P2 targets the release after · ⚪ P3 is directional</sub>
 
 ## How the benchmark was run
 
@@ -116,12 +117,12 @@ Every item in the report names the code that changes and the test that proves th
 | **Medium** | An Express + better-sqlite3 notes REST API with validation, search, pagination, a README and at least 12 passing tests |
 | **Continuation** | The medium build extended in place with scrypt auth, per-user isolation, Bearer protection and a rate limit, with the whole suite green |
 
-- Identical prompt bytes for every tool, one isolated sandbox per tool and task.
-- Each tool ran through its own non-interactive mode with full-auto approvals (`claude -p`, `codex exec`, `grok -p`). VIGIL-Code has no headless mode yet, so it ran through a driver that wires the desktop app's own engine modules to the platform API.
-- Objective checks afterwards: tests run from a clean state, functional probes against the running program, and a file and line inventory.
-- Timeout of 25 to 40 minutes per run, up to 100 turns, all runs on the same machine.
+- Every tool got the same prompt, byte for byte, and a separate isolated sandbox for each task.
+- Each tool ran in its own non-interactive mode with approvals set to full auto (`claude -p`, `codex exec`, `grok -p`). VIGIL-Code has no headless mode yet, so it ran through a driver that wires the desktop app's own engine modules to the platform API.
+- After each run, the test suite ran again from a clean state, functional probes hit the running program, and the files and lines were counted.
+- Runs had a 25 to 40 minute timeout and a limit of 100 turns. All of them ran on the same machine.
 
-The harness (`ops/bench/`) lives in the main [VIGIL-GLM](https://github.com/BradHeff/VIGIL-GLM) repository. Code paths cited in the report, such as `code/agent.cjs`, are relative to that repository.
+The harness (`ops/bench/`) lives in the main VIGIL-GLM repository. Code paths cited in the report, such as `code/agent.cjs`, are relative to that repository.
 
 </details>
 
@@ -129,7 +130,7 @@ The harness (`ops/bench/`) lives in the main [VIGIL-GLM](https://github.com/Brad
 
 | File | Contents |
 | :--- | :--- |
-| [`REPORT.md`](REPORT.md) | Full report: versions, static capability matrix, per-tool notes, results for all three tasks, integrity note, and the P0–P3 repair plan |
+| [`REPORT.md`](REPORT.md) | Full report: versions, static capability matrix, per-tool notes, results for all three tasks, integrity note, and the P0 to P3 repair plan |
 | [`Findings.png`](Findings.png) | Snapshot of the report's comparison tables |
 
 <br>
