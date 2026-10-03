@@ -174,6 +174,7 @@ The harness (`ops/bench/`) lives in the main VIGIL-GLM repository. Code paths ci
 | :--- | :--- |
 | [`REPORT.md`](REPORT.md) | Full report: versions, static capability matrix, per-tool notes, results for all three tasks, integrity note, and the P0 to P3 repair plan |
 | [`REPORT-Patched.md`](REPORT-Patched.md) | The re-run on the patched engine: methodology, before/after tables for every task, and the remaining plan |
+| [`ranking-card.png`](ranking-card.png) | Social card of the ranked table, VIGIL GLM theme, for Facebook, X and Reddit |
 | [`Findings.png`](Findings.png) | The earlier snapshot of the report's comparison tables |
 
 <br>
