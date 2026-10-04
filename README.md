@@ -238,6 +238,7 @@ The harness (`ops/bench/`) lives in the main VIGIL-GLM repository. Code paths ci
 | [`REPORT.md`](REPORT.md) | Full report: versions, static capability matrix, per-tool notes, results for all three tasks, integrity note, and the P0 to P3 repair plan |
 | [`REPORT-Patched.md`](REPORT-Patched.md) | The re-run on the patched engine: methodology, before/after tables for every task, and the remaining plan |
 | [`TOKENMIN-RESULTS.md`](TOKENMIN-RESULTS.md) | The 4 October token-minimization re-run: savings, cache-hit rates, credit prices per task, and the honest caveats |
+| [`ranking-token-card.png`](ranking-token-card.png) | Social card: rankings plus token counts and prices, VIGIL GLM theme |
 | [`Findings.png`](Findings.png) | The earlier snapshot of the report's comparison tables |
 
 <br>

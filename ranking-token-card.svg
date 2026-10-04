@@ -1,0 +1,169 @@
+<svg width="1080" height="1350" viewBox="0 0 1080 1350" xmlns="http://www.w3.org/2000/svg" font-family="Google Sans Flex">
+  <defs>
+    <radialGradient id="glowRed" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#df3448" stop-opacity="0.16"/>
+      <stop offset="100%" stop-color="#df3448" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowBlue" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#1763ef" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="#1763ef" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="topline" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#1763ef"/>
+      <stop offset="42%" stop-color="#1763ef"/>
+      <stop offset="80%" stop-color="#df3448"/>
+      <stop offset="100%" stop-color="#edc652"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1080" height="1350" fill="#070b12"/>
+  <ellipse cx="1040" cy="60" rx="620" ry="460" fill="url(#glowRed)"/>
+  <ellipse cx="60" cy="1310" rx="640" ry="440" fill="url(#glowBlue)"/>
+  <rect x="1" y="1" width="1078" height="1348" fill="none" stroke="#4fd8ff" stroke-opacity="0.14"/>
+  <rect x="0" y="0" width="1080" height="3" fill="url(#topline)"/>
+
+  <!-- Header -->
+  <g transform="translate(64,54)">
+    <g transform="scale(0.72)">
+      <path d="M26 7H60L71 18V51L40 73 9 51V18L19 7Z" fill="none" stroke="#eaf6ff" stroke-width="4"/>
+      <path d="M19 23H27L35 44 43 23H51L39 58H31Z" fill="#eaf6ff"/>
+      <path d="M58 20H66L50 58H42Z" fill="#df3448"/>
+      <path d="M26 5H39V9H26Z" fill="#edc652"/>
+    </g>
+    <text x="72" y="36" font-size="28" font-weight="700" fill="#eaf6ff" letter-spacing="6">VIGIL GLM</text>
+    <text x="72" y="62" font-size="16" fill="#7a93b5" letter-spacing="1.5">BENCHMARK · 3-4 OCT 2026 · 5 AGENTS · 3 TASKS · TOKEN METERING</text>
+  </g>
+
+  <!-- Title -->
+  <text x="64" y="146" font-size="40" font-weight="700" fill="#eaf6ff" letter-spacing="-0.5">Ranked. Then made the cheapest.</text>
+  <text x="64" y="180" font-size="18" fill="#7a93b5">Same tasks, same machine. Rankings across Code, Security and Rules drift; token counts from each agent's own accounting.</text>
+
+  <!-- Ranking table -->
+  <g font-size="22">
+    <rect x="64" y="208" width="952" height="42" rx="6" fill="#0d1420"/>
+    <text x="92" y="236" font-size="15" fill="#7a93b5" letter-spacing="2">RANK</text>
+    <text x="200" y="236" font-size="15" fill="#7a93b5" letter-spacing="2">AGENT</text>
+    <text x="600" y="236" font-size="15" fill="#7a93b5" letter-spacing="1" text-anchor="middle">CODE</text>
+    <text x="700" y="236" font-size="15" fill="#7a93b5" letter-spacing="1" text-anchor="middle">SECURITY</text>
+    <text x="812" y="236" font-size="15" fill="#7a93b5" letter-spacing="1" text-anchor="middle">RULES</text>
+    <text x="988" y="236" font-size="15" fill="#7a93b5" letter-spacing="1" text-anchor="end">OVERALL</text>
+
+    <!-- Row 1: VIGIL-Code -->
+    <rect x="64" y="258" width="952" height="88" rx="8" fill="#0d1420" stroke="#1763ef" stroke-opacity="0.55"/>
+    <rect x="64" y="258" width="6" height="88" rx="3" fill="#1763ef"/>
+    <circle cx="116" cy="302" r="20" fill="#edc652"/>
+    <text x="116" y="310" font-size="22" font-weight="700" fill="#1c1c1e" text-anchor="middle">1</text>
+    <text x="200" y="296" font-size="24" font-weight="700" fill="#eaf6ff">VIGIL-Code 0.2.49</text>
+    <text x="200" y="322" font-size="15" fill="#7a93b5">default flash · glm-5.3</text>
+    <circle cx="600" cy="302" r="17" fill="none" stroke="#7a93b5" stroke-opacity="0.8"/><text x="600" y="309" font-size="18" fill="#c8d2e0" text-anchor="middle">3</text>
+    <circle cx="700" cy="302" r="17" fill="#1763ef"/><text x="700" y="309" font-size="18" font-weight="700" fill="#ffffff" text-anchor="middle">1</text>
+    <circle cx="812" cy="302" r="17" fill="#1763ef"/><text x="812" y="309" font-size="18" font-weight="700" fill="#ffffff" text-anchor="middle">1</text>
+    <text x="988" y="310" font-size="26" font-weight="700" fill="#edc652" text-anchor="end">13/15</text>
+
+    <!-- Row 2: Codex -->
+    <rect x="64" y="354" width="952" height="82" rx="8" fill="#0d1420" stroke="#4fd8ff" stroke-opacity="0.10"/>
+    <circle cx="116" cy="395" r="20" fill="#c8d2e0"/>
+    <text x="116" y="403" font-size="22" font-weight="700" fill="#1c1c1e" text-anchor="middle">2</text>
+    <text x="200" y="390" font-size="23" font-weight="700" fill="#eaf6ff">Codex CLI</text>
+    <text x="200" y="414" font-size="14" fill="#7a93b5">0.160.0 · gpt-6-astra</text>
+    <circle cx="600" cy="395" r="17" fill="none" stroke="#7a93b5" stroke-opacity="0.8"/><text x="600" y="402" font-size="18" fill="#c8d2e0" text-anchor="middle">2</text>
+    <circle cx="700" cy="395" r="17" fill="none" stroke="#7a93b5" stroke-opacity="0.8"/><text x="700" y="402" font-size="18" fill="#c8d2e0" text-anchor="middle">2</text>
+    <circle cx="812" cy="395" r="17" fill="none" stroke="#7a93b5" stroke-opacity="0.8"/><text x="812" y="402" font-size="18" fill="#c8d2e0" text-anchor="middle">2</text>
+    <text x="988" y="403" font-size="24" font-weight="700" fill="#eaf6ff" text-anchor="end">12/15</text>
+
+    <!-- Row 3: Claude Code -->
+    <rect x="64" y="444" width="952" height="82" rx="8" fill="#0d1420" stroke="#4fd8ff" stroke-opacity="0.10"/>
+    <circle cx="116" cy="485" r="20" fill="#c98a5a"/>
+    <text x="116" y="493" font-size="22" font-weight="700" fill="#1c1c1e" text-anchor="middle">3</text>
+    <text x="200" y="480" font-size="23" font-weight="700" fill="#eaf6ff">Claude Code</text>
+    <text x="200" y="504" font-size="14" fill="#7a93b5">2.1.288 · opus 5.5 — best pure coder</text>
+    <circle cx="600" cy="485" r="17" fill="#edc652"/><text x="600" y="492" font-size="18" font-weight="700" fill="#1c1c1e" text-anchor="middle">1</text>
+    <circle cx="700" cy="485" r="17" fill="none" stroke="#7a93b5" stroke-opacity="0.8"/><text x="700" y="492" font-size="18" fill="#c8d2e0" text-anchor="middle">3</text>
+    <circle cx="812" cy="485" r="17" fill="none" stroke="#7a93b5" stroke-opacity="0.8"/><text x="812" y="492" font-size="18" fill="#c8d2e0" text-anchor="middle">3</text>
+    <text x="988" y="493" font-size="24" font-weight="700" fill="#eaf6ff" text-anchor="end">11/15</text>
+
+    <!-- Row 4: ZCode -->
+    <rect x="64" y="534" width="952" height="82" rx="8" fill="#0d1420" stroke="#4fd8ff" stroke-opacity="0.10"/>
+    <circle cx="116" cy="575" r="20" fill="none" stroke="#7a93b5" stroke-opacity="0.6"/>
+    <text x="116" y="583" font-size="20" fill="#7a93b5" text-anchor="middle">4</text>
+    <text x="200" y="570" font-size="23" font-weight="700" fill="#eaf6ff">ZCode</text>
+    <text x="200" y="594" font-size="14" fill="#7a93b5">3.11.2 · compared statically</text>
+    <text x="600" y="583" font-size="18" fill="#7a93b5" text-anchor="middle">–</text>
+    <circle cx="700" cy="575" r="17" fill="none" stroke="#7a93b5" stroke-opacity="0.8"/><text x="700" y="582" font-size="18" fill="#c8d2e0" text-anchor="middle">4</text>
+    <circle cx="812" cy="575" r="17" fill="none" stroke="#7a93b5" stroke-opacity="0.8"/><text x="812" y="582" font-size="18" fill="#c8d2e0" text-anchor="middle">4</text>
+    <text x="988" y="583" font-size="20" fill="#7a93b5" text-anchor="end">static</text>
+
+    <!-- Row 5: Grok -->
+    <rect x="64" y="624" width="952" height="82" rx="8" fill="#0d1420" stroke="#4fd8ff" stroke-opacity="0.10"/>
+    <circle cx="116" cy="665" r="20" fill="none" stroke="#7a93b5" stroke-opacity="0.6"/>
+    <text x="116" y="673" font-size="20" fill="#7a93b5" text-anchor="middle">5</text>
+    <text x="200" y="660" font-size="23" font-weight="700" fill="#eaf6ff">Grok Build</text>
+    <text x="200" y="684" font-size="14" fill="#7a93b5">1.0.44 · grok-4.7 — read the grader mid-run</text>
+    <circle cx="600" cy="665" r="17" fill="none" stroke="#7a93b5" stroke-opacity="0.8"/><text x="600" y="672" font-size="18" fill="#c8d2e0" text-anchor="middle">4</text>
+    <circle cx="700" cy="665" r="17" fill="none" stroke="#df3448" stroke-opacity="0.75"/><text x="700" y="672" font-size="18" fill="#df3448" text-anchor="middle">5</text>
+    <circle cx="812" cy="665" r="17" fill="none" stroke="#df3448" stroke-opacity="0.75"/><text x="812" y="672" font-size="18" fill="#df3448" text-anchor="middle">5</text>
+    <text x="988" y="673" font-size="24" font-weight="700" fill="#eaf6ff" text-anchor="end">3/15</text>
+  </g>
+
+  <!-- Token counts: medium task, billed-equivalent cost -->
+  <text x="64" y="764" font-size="26" font-weight="700" fill="#eaf6ff" letter-spacing="-0.3">Token counts · medium task</text>
+  <text x="64" y="792" font-size="15" fill="#7a93b5">Each agent's own accounting. Uncached input is what the account pays at full rate.</text>
+
+  <g font-size="18">
+    <!-- header -->
+    <rect x="64" y="810" width="952" height="38" rx="6" fill="#0d1420"/>
+    <text x="92" y="835" font-size="14" fill="#7a93b5" letter-spacing="2">AGENT</text>
+    <text x="620" y="835" font-size="14" fill="#7a93b5" letter-spacing="1" text-anchor="end">UNCACHED INPUT</text>
+    <text x="790" y="835" font-size="14" fill="#7a93b5" letter-spacing="1" text-anchor="end">CACHED</text>
+    <text x="952" y="835" font-size="14" fill="#7a93b5" letter-spacing="1" text-anchor="end">OUTPUT · COST</text>
+
+    <!-- VIGIL flash: winner row -->
+    <rect x="64" y="856" width="952" height="74" rx="8" fill="#0d1420" stroke="#1763ef" stroke-opacity="0.55"/>
+    <rect x="64" y="856" width="6" height="74" rx="3" fill="#1763ef"/>
+    <text x="92" y="886" font-size="20" font-weight="700" fill="#eaf6ff">VIGIL-Code flash</text>
+    <text x="92" y="910" font-size="13" fill="#7a93b5">default model · 86% cache hit</text>
+    <text x="620" y="902" font-size="20" font-weight="700" fill="#34d399" text-anchor="end">39,173</text>
+    <text x="790" y="902" font-size="18" fill="#c8d2e0" text-anchor="end">239,232</text>
+    <text x="952" y="902" font-size="18" font-weight="700" fill="#edc652" text-anchor="end">5,337 · ~$0.02</text>
+
+    <!-- Grok -->
+    <rect x="64" y="938" width="952" height="64" rx="8" fill="#0d1420" stroke="#4fd8ff" stroke-opacity="0.10"/>
+    <text x="92" y="964" font-size="19" font-weight="700" fill="#eaf6ff">Grok Build</text>
+    <text x="92" y="986" font-size="13" fill="#7a93b5">grok-4.7</text>
+    <text x="620" y="976" font-size="19" fill="#eaf6ff" text-anchor="end">43,126</text>
+    <text x="790" y="976" font-size="17" fill="#c8d2e0" text-anchor="end">119,168</text>
+    <text x="952" y="976" font-size="17" fill="#eaf6ff" text-anchor="end">20,538 · $0.09</text>
+
+    <!-- Claude -->
+    <rect x="64" y="1010" width="952" height="64" rx="8" fill="#0d1420" stroke="#4fd8ff" stroke-opacity="0.10"/>
+    <text x="92" y="1036" font-size="19" font-weight="700" fill="#eaf6ff">Claude Code</text>
+    <text x="92" y="1058" font-size="13" fill="#7a93b5">opus 5.5 / xhigh</text>
+    <text x="620" y="1048" font-size="19" fill="#eaf6ff" text-anchor="end">21,387</text>
+    <text x="790" y="1048" font-size="17" fill="#c8d2e0" text-anchor="end">350,696</text>
+    <text x="952" y="1048" font-size="17" fill="#eaf6ff" text-anchor="end">20,463 · $0.65</text>
+
+    <!-- VIGIL glm-5.3 -->
+    <rect x="64" y="1082" width="952" height="64" rx="8" fill="#0d1420" stroke="#4fd8ff" stroke-opacity="0.10"/>
+    <text x="92" y="1108" font-size="19" font-weight="700" fill="#eaf6ff">VIGIL-Code glm-5.3</text>
+    <text x="92" y="1130" font-size="13" fill="#7a93b5">flagship · 82% cache hit</text>
+    <text x="620" y="1120" font-size="19" fill="#34d399" text-anchor="end">28,160</text>
+    <text x="790" y="1120" font-size="17" fill="#c8d2e0" text-anchor="end">130,496</text>
+    <text x="952" y="1120" font-size="17" fill="#eaf6ff" text-anchor="end">18,701 · ~$0.15</text>
+
+    <!-- Codex -->
+    <rect x="64" y="1154" width="952" height="64" rx="8" fill="#0d1420" stroke="#4fd8ff" stroke-opacity="0.10"/>
+    <text x="92" y="1180" font-size="19" font-weight="700" fill="#eaf6ff">Codex CLI</text>
+    <text x="92" y="1202" font-size="13" fill="#7a93b5">gpt-6-astra</text>
+    <text x="620" y="1192" font-size="19" fill="#df3448" text-anchor="end">185,502</text>
+    <text x="790" y="1192" font-size="17" fill="#c8d2e0" text-anchor="end">150,784</text>
+    <text x="952" y="1192" font-size="17" fill="#eaf6ff" text-anchor="end">5,749 · n/a</text>
+  </g>
+
+  <!-- Savings strip -->
+  <rect x="64" y="1240" width="952" height="50" rx="6" fill="#0d1420" stroke="#1763ef" stroke-opacity="0.4"/>
+  <text x="88" y="1272" font-size="17" fill="#eaf6ff">Billed input down <tspan font-weight="700" fill="#34d399">4.3x on glm-5.3</tspan> and <tspan font-weight="700" fill="#34d399">5.8x on flash</tspan> after token minimization. Continuation on flash: <tspan font-weight="700" fill="#edc652">147 s</tspan>, fastest of the field.</text>
+
+  <!-- Footer -->
+  <text x="64" y="1316" font-size="14" fill="#7a93b5">Full tables and transcripts: github.com/BradHeff/VIGIL-GLM-Reports · Prices from each vendor's own accounting</text>
+  
+</svg>
