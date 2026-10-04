@@ -107,6 +107,59 @@ problem, and it is the same one the next plan item (P3, server-side
 caching) attacks, since every one of those requests re-bills the full
 conversation.
 
+
+## Token usage across the field
+
+Every agent's own accounting, taken from its transcript events (Claude Code
+`result.usage` with cost, Codex `turn.completed` usage, Grok's cumulative
+`end` event, VIGIL-Code the driver's meter on the SSE usage frames). Total
+input counts cached tokens as billed input. VIGIL-Code has no prompt cache
+(P3 in the plan), so its input numbers are the full re-sent history; the
+competitors' cache-read columns show what caching saved them.
+
+### Small task
+
+| Agent | Input | Cache write | Cache read | Total input | Output | Cost |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Claude Code | 10 | 29,882 | 139,638 | 169,530 | 9,641 | $0.46 |
+| Codex | 80,957 | 0 | 59,904 | 140,861 | 2,783 | n/a |
+| Grok | 54,398 | 0 | 56,704 | 111,102 | 6,528 | $0.06 |
+| VIGIL-Code glm-5.3 (baseline) | 165,353 | 0 | 0 | 165,353 | 3,770 | n/a |
+| VIGIL-Code flash (baseline) | 97,304 | 0 | 0 | 97,304 | 4,648 | n/a |
+| VIGIL-Code glm-5.3 (patched) | 27,748 | 0 | 0 | 27,748 | 422 | n/a |
+| VIGIL-Code flash (patched) | 39,047 | 0 | 0 | 39,047 | 504 | n/a |
+
+### Medium task
+
+| Agent | Input | Cache write | Cache read | Total input | Output | Cost |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Claude Code | 18 | 21,369 | 350,696 | 372,083 | 20,463 | $0.65 |
+| Codex | 185,502 | 0 | 150,784 | 336,286 | 5,749 | n/a |
+| Grok | 43,126 | 0 | 119,168 | 162,294 | 20,538 | $0.09 |
+| VIGIL-Code glm-5.3 (patched) | 129,146 | 0 | 0 | 129,146 | 4,586 | n/a |
+| VIGIL-Code flash (patched) | 226,089 | 0 | 0 | 226,089 | 673 | n/a |
+
+### Continuation task
+
+| Agent | Input | Cache write | Cache read | Total input | Output | Cost |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Claude Code | 30 | 71,921 | 886,077 | 958,028 | 37,470 | $1.50 |
+| Codex | 156,153 | 0 | 129,920 | 286,073 | 5,650 | n/a |
+| Grok | 214,487 | 0 | 673,920 | 888,407 | 51,962 | $0.37 |
+| VIGIL-Code flash (patched) | 66,257 | 0 | 0 | 66,257 | 595 | n/a |
+| VIGIL-Code glm-5.3 ran to the driver cap with 33/33 passing and no usage
+  frame captured; its request count (5, averaging ~5 minutes each on the
+  shared endpoint) implies roughly 100K+ input tokens. | | | | | | |
+
+The pattern is one line long: the competitors' caches absorb 60 to 90
+percent of every request's input, which is why Claude Code's whole
+continuation run costs $1.50 while re-sending full history would have cost
+several times that. VIGIL-Code bills the full conversation every round,
+which is exactly the P3 item: server-side prompt caching is the largest
+remaining cost and latency lever. Grok's pricing also shows what a cheap
+tier looks like ($0.06 to $0.37 per task), though it wrote the fewest tests
+on the small task and was the slowest on two of three tasks.
+
 ## What this run says
 
 The morning report's thesis held: the models were never the problem. With

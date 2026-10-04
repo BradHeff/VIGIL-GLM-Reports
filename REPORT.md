@@ -183,6 +183,50 @@ validation differs from the probe's assumptions rather than being broken.
 VIGIL-Code did not run the continuation because no medium build completed to
 extend.
 
+
+## Token usage across the field
+
+Taken from each agent's own transcript accounting (Claude Code
+`result.usage` with cost, Codex `turn.completed` usage, Grok's cumulative
+`end` event, VIGIL-Code the driver's meter). The small-task Codex and Grok
+rows come from a re-run with JSON event output after the first small pass
+recorded only plain text; their wall times and results were equivalent.
+Total input counts cached tokens as billed input.
+
+### Small task
+
+| Agent | Input | Cache write | Cache read | Total input | Output | Cost |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Claude Code | 10 | 29,882 | 139,638 | 169,530 | 9,641 | $0.46 |
+| Codex | 80,957 | 0 | 59,904 | 140,861 | 2,783 | n/a |
+| Grok | 54,398 | 0 | 56,704 | 111,102 | 6,528 | $0.06 |
+| VIGIL-Code glm-5.3 | 165,353 | 0 | 0 | 165,353 | 3,770 | n/a |
+| VIGIL-Code flash | 97,304 | 0 | 0 | 97,304 | 4,648 | n/a |
+
+### Medium task
+
+| Agent | Input | Cache write | Cache read | Total input | Output | Cost |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Claude Code | 18 | 21,369 | 350,696 | 372,083 | 20,463 | $0.65 |
+| Codex | 185,502 | 0 | 150,784 | 336,286 | 5,749 | n/a |
+| Grok | 43,126 | 0 | 119,168 | 162,294 | 20,538 | $0.09 |
+| VIGIL-Code glm-5.3 (failed at cap) | 419,118 | 0 | 0 | 419,118 | 10,550 | n/a |
+
+### Continuation task
+
+| Agent | Input | Cache write | Cache read | Total input | Output | Cost |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Claude Code | 30 | 71,921 | 886,077 | 958,028 | 37,470 | $1.50 |
+| Codex | 156,153 | 0 | 129,920 | 286,073 | 5,650 | n/a |
+| Grok | 214,487 | 0 | 673,920 | 888,407 | 51,962 | $0.37 |
+
+Cached input absorbs 60 to 90 percent of the competitors' requests; the
+baseline VIGIL-Code rows show what paying full freight every round does to
+a long turn (419K tokens and an overflow on the medium task). This is the
+P3 prompt-caching item quantified. Patched-run token figures, including
+VIGIL-Code's post-fix numbers, are in
+[REPORT-Patched.md](REPORT-Patched.md).
+
 ## Benchmark integrity note
 
 In the first small-task round the sandboxes were siblings under one
