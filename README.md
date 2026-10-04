@@ -14,6 +14,7 @@
 </p>
 
 <p>
+  <a href="TOKENMIN-RESULTS.md"><b>Token minimization results</b></a> (billed input down 4-6x, prices per task) ·
   <a href="REPORT-Patched.md"><b>Read the patched re-run</b></a> (engine fixed, all tasks green) ·
   <a href="REPORT.md"><b>Read the full report</b></a> ·
   <a href="REPORT.md#static-capability-comparison">Capability matrix</a> ·
