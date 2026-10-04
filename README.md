@@ -5,9 +5,10 @@
 **Benchmarks and capability reviews for VIGIL-Code, the desktop code agent of the [VIGIL GLM platform](https://vigilglm.ai/start).**
 
 <p>
-  <img alt="Report date" src="https://img.shields.io/badge/report-3_Oct_2026-1c1c1e?style=for-the-badge">
-  <img alt="VIGIL-Code 0.2.43" src="https://img.shields.io/badge/VIGIL--Code-0.2.43-1763ef?style=for-the-badge">
+  <img alt="Report date" src="https://img.shields.io/badge/report-4_Oct_2026-1c1c1e?style=for-the-badge">
+  <img alt="VIGIL-Code 0.2.49" src="https://img.shields.io/badge/VIGIL--Code-0.2.49-1763ef?style=for-the-badge">
   <img alt="Patched re-run" src="https://img.shields.io/badge/patched_re-run-all_green-34d399?style=for-the-badge">
+  <img alt="Billed input down 4-6x" src="https://img.shields.io/badge/billed_input-down_4--6x-34d399?style=for-the-badge">
   <img alt="Agents compared" src="https://img.shields.io/badge/agents_compared-5-edc652?style=for-the-badge">
   <img alt="Tasks" src="https://img.shields.io/badge/build_tasks-3-df3448?style=for-the-badge">
   <a href="https://vigilglm.ai/start"><img alt="Try VIGIL GLM at vigilglm.ai" src="https://img.shields.io/badge/try_it-vigilglm.ai-82acff?style=for-the-badge"></a>
@@ -25,6 +26,44 @@
 </div>
 
 <br>
+
+
+## The one-minute overview
+
+Three build tasks, five coding agents, one machine. On 3 October VIGIL-Code
+lost the medium task outright; the fixes shipped the same day and every
+task went green. On 4 October the token-minimization release shipped and
+the re-run put real prices on the work. Where things stand now:
+
+**Savings (VIGIL-Code 0.2.49 vs the 0.2.47 patched engine, medium task):**
+
+| Measure | Before | After | Saving |
+| :--- | ---: | ---: | ---: |
+| Uncached billed input, glm-5.3 | 129,146 tokens | 28,160 tokens | **4.3x** |
+| Uncached billed input, flash (default) | 226,089 tokens | 39,173 tokens | **5.8x** |
+| Prompt-cache hit rate | 0% (not metered) | 62-91% across six runs | new |
+| Review prompts (completion / progress) | 17,100 / 5,600 tokens | 1,800 / 660 tokens | ~10x / ~8x |
+| Credits for the whole continuation task, flash | not metered | **6,775** | priced |
+
+**Against the competitors (medium task, same prompts, each agent's own
+accounting):**
+
+| Agent | Uncached input | Cached input | Output | Cost |
+| :--- | ---: | ---: | ---: | ---: |
+| **VIGIL-Code flash (default)** | 39,173 | 239,232 | 5,337 | **8,028 credits (about $0.02)** |
+| VIGIL-Code glm-5.3 | 28,160 | 130,496 | 18,701 | 72,960 credits (about $0.15) |
+| Claude Code (opus/xhigh) | 21,387 | 350,696 | 20,463 | $0.65 |
+| Codex (gpt-6-astra) | 185,502 | 150,784 | 5,749 | n/a |
+| Grok (grok-4.7) | 43,126 | 119,168 | 20,538 | $0.09 |
+
+The default model now bills less than every competitor measured on the
+same task, at a wall time inside the field's band, and flash's
+continuation run (147 s) is the fastest of the entire field. Full tables,
+caveats and method: [TOKENMIN-RESULTS.md](TOKENMIN-RESULTS.md); the
+repair and re-run history: [REPORT.md](REPORT.md) and
+[REPORT-Patched.md](REPORT-Patched.md).
+
+---
 
 ## Where the five agents rank
 
@@ -126,6 +165,29 @@ xychart-beta
 
 <sub>Baseline run in the darker series position, patched run after it. The overflow that killed the baseline medium run at 419K tokens is gone.</sub>
 
+## Token minimization: the 4 October re-run
+
+Shipped in VIGIL-Code 0.2.49 and web build `de4fe033148c`: cached-token and
+credit metering on every request, delta review prompts (about 10x smaller),
+conditional progress checks, cache-stable message prefixes and tighter
+instructions with every rule kept. The Z.ai cache probe confirmed hits at
+92-100 percent on repeated prefixes and the platform bills the cached rate.
+
+| Task | Config | Time | Tests | Cache hit | Uncached input | Credits |
+| :--- | :--- | ---: | ---: | ---: | ---: | ---: |
+| Small | glm-5.3 | 105 s | 11/11 | 62% | 42,495 | 56,191 |
+| Small | flash | 138 s | 9/9 | 66% | 66,105 | 18,527 |
+| Medium | glm-5.3 | 284 s | 22/22 | 82% | 28,160 | 72,960 |
+| Medium | flash | 363 s | 18/18 | 86% | 39,173 | 8,028 |
+| Continuation | glm-5.3 | 394 s | 31/31 | 91% | 38,338 | 121,653 |
+| Continuation | flash | **147 s** | 25/25 | 88% | 26,967 | **6,775** |
+
+Every run green. The uncached-input column is the like-for-like measure
+against the earlier runs (the old meters missed tool-reply usage frames,
+and the old driver sent reviews to the wrong model; both are fixed and
+documented in [TOKENMIN-RESULTS.md](TOKENMIN-RESULTS.md), which supersedes
+the earlier VIGIL-Code token rows).
+
 ## The repair plan
 
 Every item in the report names the code that changes and the test that proves
@@ -137,13 +199,13 @@ the fix. The P0 items shipped on 3 October and are verified by the
 | ✅ **P0-1** | [Execute every tool call in a reply, not just the first](REPORT.md#p0-1-execute-every-tool-call-in-a-reply-not-just-the-first) | **Shipped 3 Oct** |
 | ✅ **P0-2** | [Cap tool-result sizes in the working context](REPORT.md#p0-2-cap-tool-result-sizes-in-the-working-context) | **Shipped 3 Oct** |
 | ✅ **P0-3** | [Make stream and transport errors recoverable mid-turn](REPORT.md#p0-3-make-stream-and-transport-errors-recoverable-mid-turn) | **Shipped 3 Oct** |
-| 🟠 **P1-4** | [Ship the headless driver as `vigil-code exec`](REPORT.md#p1-4-ship-the-headless-driver-as-vigil-code-exec) | 0.2.45 |
+| ✅ **P1-4** | [Ship the headless driver as `vigil-code exec`](REPORT.md#p1-4-ship-the-headless-driver-as-vigil-code-exec) | **Shipped 4 Oct (0.2.49)** |
 | 🟠 **P1-5** | [Suggest flash for greenfield, glm-5.3 for existing code](REPORT.md#p1-5-model-setting-guidance-default-flash-for-greenfield-flagship-for-edits) | 0.2.45 |
-| 🟠 **P1-6** | [Show token and request totals per turn](REPORT.md#p1-6-tighten-turn-latency-instrumentation) | 0.2.44 |
+| ✅ **P1-6** | [Show token and request totals per turn](REPORT.md#p1-6-tighten-turn-latency-instrumentation) | **Shipped 4 Oct (0.2.49, with credits)** |
 | 🟡 **P2-7** | [MCP client support](REPORT.md#p2-7-mcp-client-support) | 0.3 |
 | 🟡 **P2-8** | [Slash commands and user-defined subagents](REPORT.md#p2-8-slash-commands-and-user-defined-subagents) | 0.3 |
 | 🟡 **P2-9** | [Document the confinement advantage](REPORT.md#p2-9-keep-the-confinement-advantage-and-document-it) | 0.3 |
-| ⚪ **P3-10** | [Prompt caching or server-side turn state](REPORT.md#p3-10-prompt-caching-or-server-side-turn-state) | platform |
+| ✅ **P3-10** | [Prompt caching or server-side turn state](REPORT.md#p3-10-prompt-caching-or-server-side-turn-state) | **Shipped 4 Oct: Z.ai cache verified at 62-91% hit, cached rate billed** |
 
 <sub>🔴 P0 blocks the next release · 🟠 P1 belongs in it · 🟡 P2 targets the release after · ⚪ P3 is directional</sub>
 
@@ -175,7 +237,7 @@ The harness (`ops/bench/`) lives in the main VIGIL-GLM repository. Code paths ci
 | :--- | :--- |
 | [`REPORT.md`](REPORT.md) | Full report: versions, static capability matrix, per-tool notes, results for all three tasks, integrity note, and the P0 to P3 repair plan |
 | [`REPORT-Patched.md`](REPORT-Patched.md) | The re-run on the patched engine: methodology, before/after tables for every task, and the remaining plan |
-| [`ranking-card.png`](ranking-card.png) | Social card of the ranked table, VIGIL GLM theme, for Facebook, X and Reddit |
+| [`TOKENMIN-RESULTS.md`](TOKENMIN-RESULTS.md) | The 4 October token-minimization re-run: savings, cache-hit rates, credit prices per task, and the honest caveats |
 | [`Findings.png`](Findings.png) | The earlier snapshot of the report's comparison tables |
 
 <br>
